@@ -118,6 +118,10 @@ public class SupabaseActivity extends BaseAppCompatActivity {
         config.url = url;
         config.anonKey = key;
         config.save(scId);
+        if (enabled) {
+            // Adds the "Supabase" palette with ready-made blocks to the Block Manager.
+            pro.sketchware.supabase.SupabaseBlocksInstaller.install();
+        }
         return true;
     }
 

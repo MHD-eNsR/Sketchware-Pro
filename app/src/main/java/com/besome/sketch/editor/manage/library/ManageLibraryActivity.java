@@ -274,6 +274,11 @@ public class ManageLibraryActivity extends BaseAppCompatActivity implements View
                     initializeLibrary(null);
                     if (pro.sketchware.supabase.SupabaseConfig.load(sc_id).isUsable()) {
                         AnalyticsHelper.logAddLibrary(this, "Supabase", "built_in");
+                        if (!"Y".equals(compatLibraryBean.useYn)) {
+                            compatLibraryBean.useYn = "Y";
+                            initializeLibrary(compatLibraryBean);
+                            showSupabaseNeedCompatDialog();
+                        }
                     }
                     break;
 
@@ -448,6 +453,15 @@ public class ManageLibraryActivity extends BaseAppCompatActivity implements View
         outState.putString("originalAdmobUseYn", originalAdmobUseYn);
         outState.putString("originalGoogleMapUseYn", originalGoogleMapUseYn);
         super.onSaveInstanceState(outState);
+    }
+
+    private void showSupabaseNeedCompatDialog() {
+        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this);
+        dialog.setIcon(R.drawable.ic_mtrl_supabase);
+        dialog.setTitle(Helper.getResString(R.string.common_word_warning));
+        dialog.setMessage(Helper.getResString(R.string.design_library_supabase_message_need_compat));
+        dialog.setPositiveButton(Helper.getResString(R.string.common_word_ok), null);
+        dialog.show();
     }
 
     private void showFirebaseNeedCompatDialog() {

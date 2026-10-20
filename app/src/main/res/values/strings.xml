@@ -917,6 +917,7 @@ ACTION_VIEW
     <string name="unknown_attr">Unknown Attribute</string>
     <string name="attr_already_exist">This attribute already exists</string>
 
+    <string name="design_library_supabase_message_need_compat">AppCompat Library will be enabled since Supabase requires AppCompat as a dependency.</string>
     <string name="design_library_supabase_title">Supabase</string>
     <string name="design_library_supabase_description">Use Supabase Database, Auth and Storage</string>
     <string name="supabase_settings_title">Supabase Settings</string>
