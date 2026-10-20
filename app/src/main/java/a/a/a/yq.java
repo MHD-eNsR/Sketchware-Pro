@@ -29,6 +29,7 @@ import mod.hey.studios.util.ProjectFile;
 import mod.hilal.saif.blocks.CommandBlock;
 import mod.pranav.viewbinding.ViewBindingBuilder;
 import pro.sketchware.SketchApplication;
+import pro.sketchware.supabase.SupabaseConfig;
 import pro.sketchware.util.library.BuiltInLibraryManager;
 import pro.sketchware.utility.FileUtil;
 import pro.sketchware.xml.XmlBuilder;
@@ -454,6 +455,27 @@ public class yq {
     }
 
     /**
+     * Generates SupabaseHelper.java into the app's package when the project has Supabase enabled,
+     * unless the user supplied their own SupabaseHelper.java in the project's custom Java files.
+     */
+    public void generateSupabaseFiles(Context context) {
+        try {
+            String javaDir = FileUtil.getExternalStorageDir() + "/.sketchware/data/" + sc_id + "/files/java/";
+            if (new File(javaDir, "SupabaseHelper.java").exists()) {
+                return;
+            }
+
+            String template = fileUtil.b(context, "supabase" + File.separator + "SupabaseHelper.java");
+            String source = SupabaseConfig.generateHelperSource(sc_id, packageName, template);
+            if (source != null) {
+                fileUtil.b(javaFilesPath + File.separator + packageNameAsFolders + File.separator + "SupabaseHelper.java", source);
+            }
+        } catch (Exception e) {
+            Log.e("yq", "Failed to generate SupabaseHelper.java", e);
+        }
+    }
+
+    /**
      * Writes a project file to its correct location. Java files, for example, get saved to
      * <pre>
      *     {@link yq#javaFilesPath} + File.separator + {@link yq#packageNameAsFolders}
@@ -497,6 +519,11 @@ public class yq {
         generateDataBindingClasses = !(exportingType == ExportType.DEBUG_APP || exportingType == ExportType.ANDROID_STUDIO);
         if (firebase.useYn.equals(ProjectLibraryBean.LIB_USE_Y)) {
             N.isFirebaseEnabled = true;
+            N.addPermission(jq.PERMISSION_INTERNET);
+            N.addPermission(jq.PERMISSION_ACCESS_NETWORK_STATE);
+        }
+        if (SupabaseConfig.load(sc_id).isUsable()) {
+            // Supabase is plain HTTPS (REST/Auth/Storage), so it only needs network permissions.
             N.addPermission(jq.PERMISSION_INTERNET);
             N.addPermission(jq.PERMISSION_ACCESS_NETWORK_STATE);
         }
@@ -737,6 +764,7 @@ public class yq {
      */
     public ArrayList<SrcCodeBean> a(hC projectFileManager, eC projectDataManager, BuiltInLibraryManager builtInLibraryManager) {
         generateDebugFiles(SketchApplication.getContext());
+        generateSupabaseFiles(SketchApplication.getContext());
         CommandBlock.x();
 
         String javaDir = FileUtil.getExternalStorageDir() + "/.sketchware/data/" + sc_id + "/files/java/";

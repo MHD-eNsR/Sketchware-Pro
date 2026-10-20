@@ -208,6 +208,10 @@
             android:name="com.besome.sketch.editor.manage.library.firebase.ManageFirebaseActivity"
             android:configChanges="orientation|screenSize" />
         <activity
+            android:name="com.besome.sketch.editor.manage.library.supabase.SupabaseActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
             android:name="com.besome.sketch.editor.manage.library.admob.ManageAdmobActivity"
             android:configChanges="orientation|screenSize" />
         <activity

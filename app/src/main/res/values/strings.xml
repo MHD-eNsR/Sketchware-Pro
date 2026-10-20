@@ -917,4 +917,20 @@ ACTION_VIEW
     <string name="unknown_attr">Unknown Attribute</string>
     <string name="attr_already_exist">This attribute already exists</string>
 
+    <string name="design_library_supabase_title">Supabase</string>
+    <string name="design_library_supabase_description">Use Supabase Database, Auth and Storage</string>
+    <string name="supabase_settings_title">Supabase Settings</string>
+    <string name="supabase_enable">Enable Supabase</string>
+    <string name="supabase_project_url">Project URL</string>
+    <string name="supabase_project_url_hint">https://xxxx.supabase.co</string>
+    <string name="supabase_anon_key">Anon (public) key</string>
+    <string name="supabase_security_note">Use only the anon/public key. Never put the service_role key in an app, and protect your tables with Row Level Security.</string>
+    <string name="supabase_usage_note">When enabled, a SupabaseHelper class is generated in your app\'s package. Call it from \"Add source directly\" blocks, e.g. SupabaseHelper.select(\"todos\", \"select=*\", callback).</string>
+    <string name="supabase_test_connection">Test connection</string>
+    <string name="supabase_testing">Testing…</string>
+    <string name="supabase_test_ok">Connected successfully</string>
+    <string name="supabase_test_failed">Connection failed (%1$s)</string>
+    <string name="supabase_fill_required">Enter both the project URL and the anon key first</string>
+    <string name="supabase_invalid_url">The project URL is not valid</string>
+
 </resources>

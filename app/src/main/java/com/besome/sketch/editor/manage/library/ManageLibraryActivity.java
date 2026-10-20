@@ -22,6 +22,8 @@ import com.besome.sketch.editor.manage.library.firebase.ManageFirebaseActivity;
 import com.besome.sketch.editor.manage.library.googlemap.ManageGoogleMapActivity;
 import com.besome.sketch.editor.manage.library.material3.Material3LibraryActivity;
 import com.besome.sketch.editor.manage.library.material3.Material3LibraryItemView;
+import com.besome.sketch.editor.manage.library.supabase.SupabaseActivity;
+import com.besome.sketch.editor.manage.library.supabase.SupabaseLibraryItemView;
 import com.besome.sketch.lib.base.BaseAppCompatActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -49,6 +51,7 @@ public class ManageLibraryActivity extends BaseAppCompatActivity implements View
     private final int REQUEST_CODE_GOOGLE_MAPS_ACTIVITY = 241;
     private final int REQUEST_CODE_MATERIAL3_ACTIVITY = 242;
     private final int REQUEST_CODE_CUSTOM_ITEM_LIBRARY_ACTIVITY = 243;
+    private final int REQUEST_CODE_SUPABASE_ACTIVITY = 244;
 
     private String sc_id;
     private LinearLayout libraryItemLayout;
@@ -100,6 +103,9 @@ public class ManageLibraryActivity extends BaseAppCompatActivity implements View
         if (type == ProjectLibraryBean.PROJECT_LIB_TYPE_EXCLUDE_BUILTIN_LIBRARIES) {
             libraryItemView = new ExcludeBuiltInLibrariesLibraryItemView(this, sc_id);
             libraryItemView.setData(null);
+        } else if (type == ProjectLibraryBean.PROJECT_LIB_TYPE_SUPABASE) {
+            libraryItemView = new SupabaseLibraryItemView(this, sc_id);
+            libraryItemView.setData(null);
         } else {
             libraryItemView = new Material3LibraryItemView(this);
             libraryItemView.setData(compatLibraryBean);
@@ -134,7 +140,8 @@ public class ManageLibraryActivity extends BaseAppCompatActivity implements View
 
         for (LibraryItemView itemView : libraryItems) {
             Object tag = itemView.getTag();
-            if (itemView instanceof ExcludeBuiltInLibrariesLibraryItemView) {
+            if (itemView instanceof ExcludeBuiltInLibrariesLibraryItemView
+                    || itemView instanceof SupabaseLibraryItemView) {
                 itemView.setData(null);
             } else if (itemView instanceof Material3LibraryItemView) {
                 itemView.setData(compatLibraryBean);
@@ -180,6 +187,13 @@ public class ManageLibraryActivity extends BaseAppCompatActivity implements View
         intent.putExtra("sc_id", sc_id);
         intent.putExtra("app_compat", compatLibraryBean);
         startActivityForResult(intent, REQUEST_CODE_CUSTOM_ITEM_LIBRARY_ACTIVITY);
+    }
+
+    private void toSupabaseActivity() {
+        Intent intent = new Intent(getApplicationContext(), SupabaseActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra("sc_id", sc_id);
+        startActivityForResult(intent, REQUEST_CODE_SUPABASE_ACTIVITY);
     }
 
     private void toMaterial3Activity() {
@@ -256,6 +270,13 @@ public class ManageLibraryActivity extends BaseAppCompatActivity implements View
                     initializeLibrary(null);
                     break;
 
+                case REQUEST_CODE_SUPABASE_ACTIVITY:
+                    initializeLibrary(null);
+                    if (pro.sketchware.supabase.SupabaseConfig.load(sc_id).isUsable()) {
+                        AnalyticsHelper.logAddLibrary(this, "Supabase", "built_in");
+                    }
+                    break;
+
                 default:
             }
         }
@@ -310,6 +331,11 @@ public class ManageLibraryActivity extends BaseAppCompatActivity implements View
 
                     case ProjectLibraryBean.PROJECT_LIB_TYPE_MATERIAL3:
                         toMaterial3Activity();
+                        break;
+
+                    case ProjectLibraryBean.PROJECT_LIB_TYPE_SUPABASE:
+                        toSupabaseActivity();
+                        break;
                 }
             }
         }
@@ -390,6 +416,7 @@ public class ManageLibraryActivity extends BaseAppCompatActivity implements View
         addLibraryItem(compatLibraryBean, basicCategory);
         addCustomLibraryItem(ProjectLibraryBean.PROJECT_LIB_TYPE_MATERIAL3, basicCategory);
         addLibraryItem(firebaseLibraryBean, basicCategory);
+        addCustomLibraryItem(ProjectLibraryBean.PROJECT_LIB_TYPE_SUPABASE, basicCategory);
         addLibraryItem(admobLibraryBean, basicCategory);
         addLibraryItem(googleMapLibraryBean, basicCategory, false);
 

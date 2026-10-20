@@ -36,6 +36,11 @@ public class ProjectLibraryBean implements Parcelable {
     public static final int PROJECT_LIB_TYPE_NATIVE_LIB = 5;
     public static final int PROJECT_LIB_TYPE_EXCLUDE_BUILTIN_LIBRARIES = 6;
     public static final int PROJECT_LIB_TYPE_MATERIAL3 = 7;
+    /**
+     * UI-only type used to tag the Supabase row in the library list. Supabase settings are stored by
+     * {@link pro.sketchware.supabase.SupabaseConfig}, not as a ProjectLibraryBean.
+     */
+    public static final int PROJECT_LIB_TYPE_SUPABASE = 8;
 
     @Expose
     public String appId;
