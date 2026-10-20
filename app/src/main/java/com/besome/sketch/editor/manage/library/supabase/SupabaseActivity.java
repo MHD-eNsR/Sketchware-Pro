@@ -36,7 +36,7 @@ public class SupabaseActivity extends BaseAppCompatActivity {
     private Button testButton;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         enableEdgeToEdgeNoContrast();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manage_library_supabase);
